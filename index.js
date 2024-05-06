@@ -1,19 +1,34 @@
-function combinationSum2(candidates, target) {
-  candidates.sort((a, b) => a - b);
-  const result = [];
-  backtrack([], 0, 0);
-  return result;
-  function backtrack(combination, start, sum) {
-    if (sum === target) {
-      result.push([...combination]);
-      return;
-    }
-    if (sum > target) return;
-    for (let i = start; i < candidates.length; i++) {
-      if (i > start && candidates[i] === candidates[i - 1]) continue;
-      combination.push(candidates[i]);
-      backtrack(combination, i + 1, sum + candidates[i]);
-      combination.pop();
-    }
+function minWindowSubstring(s, t) {
+  const map = new Map();
+  for (const char of t) {
+    map.set(char, (map.get(char) || 0) + 1);
   }
+  let required = map.size;
+  let left = 0;
+  let right = 0;
+  let minLen = Infinity;
+  let substrStart = 0;
+  while (right < s.length) {
+    const char = s[right];
+    if (map.has(char)) {
+      map.set(char, map.get(char) - 1);
+      if (map.get(char) === 0) required--;
+    }
+    while (required === 0) {
+      if (right - left + 1 < minLen) {
+        minLen = right - left + 1;
+        substrStart = left;
+      }
+      const leftChar = s[left];
+      if (map.has(leftChar)) {
+        map.set(leftChar, map.get(leftChar) + 1);
+        if (map.get(leftChar) > 0) required++;
+      }
+      left++;
+    }
+    right++;
+  }
+  return minLen === Infinity
+    ? ""
+    : s.substring(substrStart, substrStart + minLen);
 }
