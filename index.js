@@ -1,21 +1,22 @@
-function getPermutation(n, k) {
-  const nums = Array.from({ length: n }, (_, i) => i + 1);
-  let result = "";
-  let count = 0;
-  const backtrack = (current) => {
-    if (current.length === n) {
-      count++;
-      if (count === k) result = current.join("");
-      return;
+function threeSum(nums) {
+  nums.sort((a, b) => a - b);
+  const result = [];
+  for (let i = 0; i < nums.length - 2; i++) {
+    if (i === 0 || (i > 0 && nums[i] !== nums[i - 1])) {
+      let low = i + 1;
+      let high = nums.length - 1;
+      const sum = 0 - nums[i];
+      while (low < high) {
+        if (nums[low] + nums[high] === sum) {
+          result.push([nums[i], nums[low], nums[high]]);
+          while (low < high && nums[low] === nums[low + 1]) low++;
+          while (low < high && nums[high] === nums[high - 1]) high--;
+          low++;
+          high--;
+        } else if (nums[low] + nums[high] < sum) low++;
+        else high--;
+      }
     }
-    if (count >= k) return;
-    for (const num of nums) {
-      if (current.includes(num)) continue;
-      current.push(num);
-      backtrack(current);
-      current.pop();
-    }
-  };
-  backtrack([]);
+  }
   return result;
 }
