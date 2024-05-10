@@ -1,22 +1,26 @@
-function threeSum(nums) {
-  nums.sort((a, b) => a - b);
-  const result = [];
-  for (let i = 0; i < nums.length - 2; i++) {
-    if (i === 0 || (i > 0 && nums[i] !== nums[i - 1])) {
-      let low = i + 1;
-      let high = nums.length - 1;
-      const sum = 0 - nums[i];
-      while (low < high) {
-        if (nums[low] + nums[high] === sum) {
-          result.push([nums[i], nums[low], nums[high]]);
-          while (low < high && nums[low] === nums[low + 1]) low++;
-          while (low < high && nums[high] === nums[high - 1]) high--;
-          low++;
-          high--;
-        } else if (nums[low] + nums[high] < sum) low++;
-        else high--;
+function isValidSudoku(board) {
+  for (let i = 0; i < 9; i++) {
+    const row = new Set();
+    const col = new Set();
+    const box = new Set();
+    for (let j = 0; j < 9; j++) {
+      const rowVal = board[i][j];
+      const colVal = board[j][i];
+      const boxVal =
+        board[3 * Math.floor(i / 3) + Math.floor(j / 3)][3 * (i % 3) + (j % 3)];
+      if (rowVal !== ".") {
+        if (row.has(rowVal)) return false;
+        row.add(rowVal);
+      }
+      if (colVal !== ".") {
+        if (col.has(colVal)) return false;
+        col.add(colVal);
+      }
+      if (boxVal !== ".") {
+        if (box.has(boxVal)) return false;
+        box.add(boxVal);
       }
     }
   }
-  return result;
+  return true;
 }
