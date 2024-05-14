@@ -1,10 +1,16 @@
-function rob(nums) {
-  let prevMax = 0;
-  let currMax = 0;
-  for (const num of nums) {
-    const temp = currMax;
-    currMax = Math.max(prevMax + num, currMax);
-    prevMax = temp;
+function numDecodings(s) {
+  const dp = new Array(s.length + 1).fill(0);
+  dp[0] = 1;
+  dp[1] = s[0] === "0" ? 0 : 1;
+  for (let i = 2; i <= s.length; i++) {
+    const oneDigit = parseInt(s.substring(i - 1, i));
+    const twoDigits = parseInt(s.substring(i - 2, i));
+    if (oneDigit >= 1) {
+      dp[i] += dp[i - 1];
+    }
+    if (twoDigits >= 10 && twoDigits <= 26) {
+      dp[i] += dp[i - 2];
+    }
   }
-  return currMax;
+  return dp[s.length];
 }
